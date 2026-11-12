@@ -2,12 +2,13 @@
 services:
   mysql:
     image: mysql:8.4
-    container_name: mysql
+    container_name: trabalho
+    command: --log-bin-trust-function-creators=1
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: dependency_manager
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
