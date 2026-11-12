@@ -303,4 +303,39 @@ Iniciar Containers:
 docker compose up -d
 ```
 
+## 10. Como executar a aplicação
+
+Requisitos: Node.js 20.6+ e Docker.
+
+```bash
+docker compose up -d
+docker exec -i trabalho mysql -uroot -proot < banco.sql   # cria estrutura, procedures, views e usuários
+cp .env.example .env                                      # preencha as senhas (MYSQL_PASSWORD / NEO4J_PASSWORD)
+npm install
+npm start
+```
+
+Acesse:
+
+- Tela 1 — Cadastro: http://localhost:3000/
+- Tela 2 — Consulta: http://localhost:3000/consulta
+
+### Estrutura
+
+| Caminho | Conteúdo |
+|---|---|
+| `src/server.js` | Servidor Express, health check e tratamento de erros |
+| `src/routes/sistemas.js` | API: opções, cadastro, consulta, resumo e grafo |
+| `src/db/mysql.js` | Pool MySQL (usuário `app_backend`) e consulta à `vw_sistemas_detalhado` |
+| `src/db/neo4j.js` | Driver Neo4j: criação de nós/relacionamentos e consultas de dependências |
+| `public/` | Telas (HTML/CSS/JS); grafo renderizado com vis-network |
+
+### Decisões de implementação
+
+- **Consistência entre bancos:** a chamada a `sp_cadastrar_sistema` roda dentro de uma transação MySQL que só é confirmada depois que o nó e os relacionamentos foram gravados (em transação) no Neo4j. Se o Neo4j falhar, o MySQL faz rollback e a tela exibe o erro.
+- **Duplicidade:** dependências repetidas são removidas, os relacionamentos usam `MERGE` e há uma constraint de unicidade em `:Sistema(codigo)`.
+- **Valores dos campos:** as opções de tipo, ambiente, status e criticidade são lidas das colunas `ENUM` da tabela `sistemas`.
+- **Resumo de criticidade:** soma os totais de `vw_resumo_criticidade`, respeitando os filtros de ambiente e status.
+- **Segurança:** todas as consultas SQL e Cypher são parametrizadas; credenciais ficam no `.env` (fora do git).
+
 

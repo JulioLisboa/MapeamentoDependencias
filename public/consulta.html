@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consulta de Sistemas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1><span>Mapeamento de Dependências</span></h1>
+    <nav>
+      <a href="/">Cadastro</a>
+      <a href="/consulta" class="ativo">Consulta</a>
+    </nav>
+    <div class="status-bancos"></div>
+  </header>
+
+  <main>
+    <h2 class="titulo-pagina">Consulta de sistemas</h2>
+    <p class="subtitulo">Filtre os sistemas cadastrados e explore como eles dependem uns dos outros.</p>
+    <div id="alerta" class="alerta erro oculto" role="alert"></div>
+
+    <!-- Área 1: filtros + listagem -->
+    <section class="card">
+      <form id="form-filtros" class="filtros">
+        <div>
+          <label for="f-busca">Nome ou código</label>
+          <input id="f-busca" name="busca" type="search" maxlength="120" placeholder="Ex.: Portal ou SIS-000001">
+        </div>
+        <div>
+          <label for="f-ambiente">Ambiente</label>
+          <select id="f-ambiente" name="ambiente"></select>
+        </div>
+        <div>
+          <label for="f-status">Status</label>
+          <select id="f-status" name="status"></select>
+        </div>
+        <div>
+          <label for="f-criticidade">Criticidade</label>
+          <select id="f-criticidade" name="criticidade"></select>
+        </div>
+        <div class="botoes">
+          <button type="submit">Filtrar</button>
+          <button type="reset" class="secundario">Limpar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Área 2: resumo de criticidade -->
+    <section class="card">
+      <h2>Resumo por criticidade <small id="resumo-ctx" class="codigo"></small></h2>
+      <div id="indicadores" class="indicadores"></div>
+    </section>
+
+    <section class="card">
+      <h2>Resultados <small id="qtd-resultados" class="codigo"></small></h2>
+      <div class="tabela-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Ambiente</th>
+              <th>Status</th>
+              <th>Criticidade</th>
+              <th>Departamento</th>
+              <th>Responsável</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tabela-corpo">
+            <tr><td colspan="9" class="vazio">Carregando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Área 3: grafo de dependências -->
+    <section id="secao-grafo" class="card oculto">
+      <div class="grafo-topo">
+        <h2>Dependências de <span id="grafo-titulo"></span></h2>
+        <div class="botoes" style="display:flex;gap:8px">
+          <button type="button" id="btn-centralizar" class="pequeno secundario">Centralizar</button>
+          <button type="button" id="btn-fechar-grafo" class="pequeno secundario">Fechar</button>
+        </div>
+      </div>
+      <div class="legenda">
+        <span><i style="background:#172033"></i>Sistema selecionado</span>
+        <span><i style="background:#4f46e5"></i>Dependência direta</span>
+        <span><i style="background:#8b93b8"></i>Dependência indireta</span>
+        <span><i style="background:#d33a3a"></i>Sistema impactado</span>
+        <span>A → B: A depende de B</span>
+      </div>
+      <div class="grafo-layout">
+        <div id="grafo"></div>
+        <div class="grupo-deps">
+          <h3>Dependências diretas <span id="n-diretas" class="codigo"></span></h3>
+          <ul id="l-diretas" class="diretas"></ul>
+          <h3>Dependências indiretas <span id="n-indiretas" class="codigo"></span></h3>
+          <ul id="l-indiretas" class="indiretas"></ul>
+          <h3>Sistemas impactados <span id="n-impactados" class="codigo"></span></h3>
+          <ul id="l-impactados" class="impactados"></ul>
+          <p class="dica">Dica: dê dois cliques em um nó para ver as dependências dele.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/js/consulta.js"></script>
+</body>
+</html>

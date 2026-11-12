@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro de Sistemas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <h1><span>Mapeamento de Dependências</span></h1>
+    <nav>
+      <a href="/" class="ativo">Cadastro</a>
+      <a href="/consulta">Consulta</a>
+    </nav>
+    <div class="status-bancos"></div>
+  </header>
+
+  <main class="estreito">
+    <h2 class="titulo-pagina">Novo sistema</h2>
+    <p class="subtitulo">Cadastre um sistema e indique de quais outros sistemas ele depende.</p>
+    <div id="alerta" class="alerta oculto" role="alert"></div>
+
+    <form id="form-cadastro" class="card" novalidate>
+      <div class="grid">
+        <div class="secao-titulo">Identificação</div>
+        <div class="campo full" data-campo="nome">
+          <label for="nome">Nome do sistema <span class="req">*</span></label>
+          <input id="nome" name="nome" maxlength="120" required>
+          <div class="erro-campo"></div>
+        </div>
+
+        <div class="campo full" data-campo="descricao">
+          <label for="descricao">Descrição</label>
+          <textarea id="descricao" name="descricao"></textarea>
+          <div class="erro-campo"></div>
+        </div>
+
+        <div class="campo full" data-campo="url">
+          <label for="url">URL</label>
+          <input id="url" name="url" type="url" maxlength="255" placeholder="https://">
+          <div class="erro-campo"></div>
+        </div>
+
+        <div class="secao-titulo">Classificação</div>
+
+        <div class="campo" data-campo="tipo">
+          <label for="tipo">Tipo <span class="req">*</span></label>
+          <select id="tipo" name="tipo" required></select>
+          <div class="erro-campo"></div>
+        </div>
+
+        <div class="campo" data-campo="ambiente">
+          <label for="ambiente">Ambiente <span class="req">*</span></label>
+          <select id="ambiente" name="ambiente" required></select>
+          <div class="erro-campo"></div>
+        </div>
+
+        <div class="campo" data-campo="status">
+          <label for="status">Status <span class="req">*</span></label>
+          <select id="status" name="status" required></select>
+          <div class="erro-campo"></div>
+        </div>
+
+        <div class="campo" data-campo="criticidade">
+          <label for="criticidade">Criticidade <span class="req">*</span></label>
+          <select id="criticidade" name="criticidade" required></select>
+          <div class="erro-campo"></div>
+        </div>
+
+        <div class="secao-titulo">Responsabilidade</div>
+
+        <div class="campo" data-campo="departamento">
+          <label for="departamento">Departamento <span class="req">*</span></label>
+          <input id="departamento" name="departamento" maxlength="100" required>
+          <div class="erro-campo"></div>
+        </div>
+
+        <div class="campo" data-campo="responsavel_id">
+          <label for="responsavel_id">Responsável <span class="req">*</span></label>
+          <select id="responsavel_id" name="responsavel_id" required></select>
+          <div class="erro-campo"></div>
+        </div>
+
+        <div class="secao-titulo">Dependências</div>
+
+        <div class="campo full" data-campo="dependencias">
+          <label for="busca-deps">Este sistema depende de… <small>(opcional)</small></label>
+          <div class="deps-box">
+            <input id="busca-deps" type="search" placeholder="Filtrar por nome ou código…">
+            <div id="deps-lista" class="deps-lista"></div>
+          </div>
+          <div id="deps-chips" class="chips"></div>
+          <div class="erro-campo"></div>
+        </div>
+      </div>
+
+      <div class="acoes">
+        <button type="reset" class="secundario">Limpar</button>
+        <button type="submit" id="btn-cadastrar">Cadastrar</button>
+      </div>
+    </form>
+  </main>
+
+  <script type="module" src="/js/cadastro.js"></script>
+</body>
+</html>
